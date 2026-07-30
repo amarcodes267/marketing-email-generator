@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personalized Marketing Copy AI</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <span class="logo-icon">&#x2728;</span>
+        <span class="logo-text">Marketing AI</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#" class="nav-link active">Home</a></li>
+        <li><a href="#" class="nav-link">About</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-container">
+      <div class="hero-icon">&#x1F916;</div>
+      <h1 class="hero-title">Personalized Marketing Copy AI</h1>
+      <p class="hero-subtitle">Generate AI-powered personalized marketing emails using customer demographics and purchase history.</p>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="content-grid">
+
+      <section class="form-section">
+        <div class="card form-card">
+          <h2 class="card-title">Customer Information</h2>
+
+          <div class="form-group">
+            <label for="customerName">Customer Name <span class="required">*</span></label>
+            <input type="text" id="customerName" placeholder="Enter customer name" required>
+            <span class="error-message" id="nameError"></span>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="age">Age <span class="required">*</span></label>
+              <input type="number" id="age" placeholder="25" min="18" max="100" required>
+              <span class="error-message" id="ageError"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="gender">Gender <span class="required">*</span></label>
+              <select id="gender" required>
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+              <span class="error-message" id="genderError"></span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="location">Location <span class="required">*</span></label>
+            <input type="text" id="location" placeholder="Delhi, Mumbai, Bangalore" required>
+            <span class="error-message" id="locationError"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="purchaseHistory">Purchase History <span class="required">*</span></label>
+            <textarea id="purchaseHistory" placeholder="Nike Shoes&#10;Apple Watch&#10;Bluetooth Speaker" rows="4" required></textarea>
+            <span class="error-message" id="purchaseError"></span>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="favoriteCategory">Favorite Category <span class="required">*</span></label>
+              <select id="favoriteCategory" required>
+                <option value="">Select Category</option>
+                <option value="Fashion">Fashion</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Books">Books</option>
+                <option value="Sports">Sports</option>
+                <option value="Home Decor">Home Decor</option>
+                <option value="Beauty">Beauty</option>
+              </select>
+              <span class="error-message" id="categoryError"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="totalSpending">Total Spending <span class="required">*</span></label>
+              <div class="input-icon-wrapper">
+                <span class="input-icon">&#x20B9;</span>
+                <input type="number" id="totalSpending" placeholder="5000" min="1" required>
+              </div>
+              <span class="error-message" id="spendingError"></span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="emailTone">Email Tone <span class="required">*</span></label>
+            <select id="emailTone" required>
+              <option value="">Select Tone</option>
+              <option value="Professional">Professional</option>
+              <option value="Friendly">Friendly</option>
+              <option value="Luxury">Luxury</option>
+              <option value="Exciting">Exciting</option>
+            </select>
+            <span class="error-message" id="toneError"></span>
+          </div>
+
+          <div class="sidebar-tips">
+            <p class="tip">&#x2714; Use complete customer information</p>
+            <p class="tip">&#x2714; More purchase history improves personalization</p>
+            <p class="tip">&#x2714; Choose the correct product category</p>
+          </div>
+
+          <div class="button-group">
+            <button class="btn btn-primary" id="generateBtn">
+              <span class="btn-icon">&#x1F52E;</span>
+              Generate Personalized Email
+            </button>
+            <div class="secondary-buttons">
+              <button class="btn btn-secondary" id="copyBtn" disabled>Copy Email</button>
+              <button class="btn btn-outline" id="clearBtn">Clear Form</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="output-section">
+        <div class="card output-card">
+          <h2 class="card-title">Generated Marketing Email</h2>
+
+          <div class="spinner-overlay" id="spinnerOverlay">
+            <div class="spinner"></div>
+            <p class="spinner-text">Generating AI Email...</p>
+          </div>
+
+          <div class="output-group">
+            <label for="subjectOutput">Subject</label>
+            <textarea id="subjectOutput" class="output-textarea" rows="2" readonly placeholder="Subject will appear here..."></textarea>
+          </div>
+
+          <div class="output-group">
+            <label for="emailOutput">Email</label>
+            <textarea id="emailOutput" class="output-textarea email-body" rows="12" readonly placeholder="Your AI generated email will appear here..."></textarea>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <p>Developed using HTML &bull; CSS &bull; JavaScript</p>
+      <p>Powered by AI <span class="coming-soon">(Coming Soon)</span></p>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
