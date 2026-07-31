@@ -1,6 +1,8 @@
 (function() {
   'use strict';
 
+  const API_BASE_URL = 'http://localhost:5000';
+
   const customerName = document.getElementById('customerName');
   const age = document.getElementById('age');
   const gender = document.getElementById('gender');
@@ -30,46 +32,6 @@
     totalSpending: document.getElementById('spendingError'),
     emailTone: document.getElementById('toneError')
   };
-
-  const toneStyles = {
-    'Professional': {
-      greeting: 'Dear',
-      signoff: 'Best regards',
-      bodyPrefix: 'We are pleased to inform you about our latest offerings tailored to your preferences.'
-    },
-    'Friendly': {
-      greeting: 'Hey',
-      signoff: 'Cheers',
-      bodyPrefix: 'We hope you are doing great! We have something special just for you.'
-    },
-    'Luxury': {
-      greeting: 'Dear',
-      signoff: 'Yours sincerely',
-      bodyPrefix: 'It is our privilege to present you with an exclusive selection curated to your exquisite taste.'
-    },
-    'Exciting': {
-      greeting: 'Hello',
-      signoff: 'See you soon',
-      bodyPrefix: 'Get ready! We have some amazing news that will make your day.'
-    }
-  };
-
-  const categoryAdjectives = {
-    'Fashion': 'stylish',
-    'Electronics': 'cutting-edge',
-    'Books': 'bestselling',
-    'Sports': 'high-performance',
-    'Home Decor': 'elegant',
-    'Beauty': 'premium'
-  };
-
-  const storeNames = [
-    'ShopVault',
-    'TrendHub',
-    'PrimeCart',
-    'StyleBazaar',
-    'EliteMall'
-  ];
 
   function clearErrors() {
     Object.values(errorElements).forEach(el => el.textContent = '');
@@ -137,57 +99,17 @@
     return isValid;
   }
 
-  function getFormData() {
+  function buildPayload() {
     return {
-      name: customerName.value.trim(),
-      age: age.value,
+      customer_name: customerName.value.trim(),
+      age: parseInt(age.value, 10),
       gender: gender.value,
       location: location.value.trim(),
-      purchases: purchaseHistory.value.trim(),
-      category: favoriteCategory.value,
-      spending: totalSpending.value,
+      purchase_history: purchaseHistory.value.trim(),
+      favorite_category: favoriteCategory.value,
+      total_spending: parseFloat(totalSpending.value),
       tone: emailTone.value
     };
-  }
-
-  function generateSubject(data) {
-    const greetings = [
-      `Exclusive Offer Just for You, ${data.name}!`,
-      `${data.name}, Your Personalized Deal Awaits!`,
-      `Special Invitation for ${data.name}!`,
-      `${data.name}, Discover Your Perfect Match!`,
-      `Don't Miss Out, ${data.name}!`
-    ];
-    return greetings[Math.floor(Math.random() * greetings.length)];
-  }
-
-  function generateEmail(data) {
-    const tone = toneStyles[data.tone] || toneStyles['Professional'];
-    const adjective = categoryAdjectives[data.category] || 'amazing';
-    const store = storeNames[Math.floor(Math.random() * storeNames.length)];
-    const purchaseList = data.purchases.split('\n').filter(p => p.trim()).map(p => p.trim());
-    const purchaseStr = purchaseList.length > 1
-      ? purchaseList.slice(0, -1).join(', ') + ' and ' + purchaseList[purchaseList.length - 1]
-      : purchaseList[0] || 'our products';
-
-    const subject = generateSubject(data);
-
-    let body = `${tone.greeting} ${data.name},\n\n`;
-    body += `${tone.bodyPrefix}\n\n`;
-    body += `As a valued customer from ${data.location}, we truly appreciate your continued trust in ${store}. `;
-    body += `Your recent purchases of ${purchaseStr} show your great taste in ${data.category.toLowerCase()}!\n\n`;
-    body += `Based on your interest in ${data.category}, we are excited to introduce our latest ${adjective} collection that we think you will love. `;
-    body += `With a total spending of \u20B9${parseFloat(data.spending).toLocaleString('en-IN')}, you are among our most valued customers. `;
-    body += `As a special thank you, we have curated a selection of premium ${data.category.toLowerCase()} items just for you.\n\n`;
-    body += `Here is what we recommend for you:\n`;
-    body += `- Explore our new ${adjective} arrivals in ${data.category}\n`;
-    body += `- Enjoy exclusive discounts available only for our ${data.location} customers\n`;
-    body += `- Get personalized recommendations based on your purchase history\n\n`;
-    body += `Hurry, these offers are available for a limited time only!\n\n`;
-    body += `${tone.signoff},\n`;
-    body += `${store} Team`;
-
-    return { subject, body };
   }
 
   function showToast(message) {
@@ -198,24 +120,53 @@
     }, 2500);
   }
 
-  function handleGenerate() {
-    if (!validateForm()) return;
-
-    const data = getFormData();
-
-    spinnerOverlay.classList.add('active');
-    generateBtn.disabled = true;
-    copyBtn.disabled = true;
-
-    setTimeout(() => {
-      const result = generateEmail(data);
-      subjectOutput.value = result.subject;
-      emailOutput.value = result.body;
-
+  function setLoading(loading) {
+    if (loading) {
+      spinnerOverlay.classList.add('active');
+      generateBtn.disabled = true;
+      copyBtn.disabled = true;
+    } else {
       spinnerOverlay.classList.remove('active');
       generateBtn.disabled = false;
-      copyBtn.disabled = false;
-    }, 2000);
+    }
+  }
+
+  async function handleGenerate() {
+    if (!validateForm()) return;
+
+    const payload = buildPayload();
+
+    setLoading(true);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/generate-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        subjectOutput.value = result.subject;
+        emailOutput.value = result.email;
+        copyBtn.disabled = false;
+      } else {
+        subjectOutput.value = 'Subject will appear here...';
+        emailOutput.value = 'Your AI generated email will appear here...';
+        copyBtn.disabled = true;
+        showToast(result.message || 'An error occurred');
+      }
+    } catch (error) {
+      subjectOutput.value = 'Subject will appear here...';
+      emailOutput.value = 'Your AI generated email will appear here...';
+      copyBtn.disabled = true;
+      showToast('Unable to connect to the server. Please ensure the backend is running.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   function handleCopy() {
