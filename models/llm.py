@@ -1,0 +1,92 @@
+import queue
+import threading
+
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+MODEL_NAME = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
+MAX_NEW_TOKENS = 500
+GENERATION_TIMEOUT_SECONDS = 300
+
+_tokenizer = None
+_model = None
+_model_ready = False
+_load_lock = threading.Lock()
+_inference_lock = threading.Lock()
+
+
+class ModelLoadError(RuntimeError):
+    pass
+
+
+def load_model():
+    global _model, _tokenizer, _model_ready
+    if _model_ready:
+        return
+    with _load_lock:
+        if _model_ready:
+            return
+        try:
+            _tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+            _model = AutoModelForCausalLM.from_pretrained(
+                MODEL_NAME,
+                low_cpu_mem_usage=True,
+                dtype=torch.float32,
+            )
+            _model.eval()
+            _model_ready = True
+        except Exception as error:
+            raise ModelLoadError(f"AI model failed to load: {error}") from error
+
+
+def _build_prompt_text(prompt_messages):
+    return _tokenizer.apply_chat_template(
+        prompt_messages, tokenize=False, add_generation_prompt=True
+    )
+
+
+def _run_inference(prompt_messages, result_queue):
+    try:
+        tokenizer = _tokenizer
+        model = _model
+        prompt_text = _build_prompt_text(prompt_messages)
+        inputs = tokenizer(
+            prompt_text,
+            return_tensors="pt",
+            truncation=True,
+            max_length=1024,
+        )
+        with torch.no_grad():
+            outputs = model.generate(
+                **inputs,
+                max_new_tokens=MAX_NEW_TOKENS,
+                do_sample=True,
+                temperature=0.7,
+                top_p=0.9,
+                repetition_penalty=1.1,
+                pad_token_id=tokenizer.eos_token_id,
+            )
+        generated_ids = outputs[0][inputs["input_ids"].shape[1]:]
+        generated_text = tokenizer.decode(generated_ids, skip_special_tokens=True)
+        result_queue.put(("success", generated_text))
+    except Exception as error:
+        result_queue.put(("error", str(error)))
+
+
+def generate_text(prompt_messages):
+    with _inference_lock:
+        load_model()
+        result_queue = queue.Queue()
+        worker = threading.Thread(
+            target=_run_inference,
+            args=(prompt_messages, result_queue),
+            daemon=True,
+        )
+        worker.start()
+        worker.join(timeout=GENERATION_TIMEOUT_SECONDS)
+        if worker.is_alive():
+            raise TimeoutError("AI generation timed out. Please try again.")
+        status, payload = result_queue.get()
+        if status == "error":
+            raise RuntimeError(f"AI generation failed: {payload}")
+        return payload

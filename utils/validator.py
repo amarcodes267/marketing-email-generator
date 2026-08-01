@@ -1,5 +1,30 @@
 ALLOWED_GENDERS = ["Male", "Female", "Other"]
-ALLOWED_TONES = ["Friendly", "Professional", "Luxury", "Exciting"]
+ALLOWED_TONES = [
+    "Friendly",
+    "Warm",
+    "Casual",
+    "Conversational",
+    "Professional",
+    "Formal",
+    "Business",
+    "Trustworthy",
+    "Luxury",
+    "Elegant",
+    "Premium",
+    "Exclusive",
+    "Exciting",
+    "Energetic",
+    "Urgent",
+    "Promotional",
+]
+ALLOWED_CATEGORIES = [
+    "Fashion",
+    "Electronics",
+    "Books",
+    "Sports",
+    "Home Decor",
+    "Beauty",
+]
 
 
 def validate_email_request(data):
@@ -37,11 +62,14 @@ def validate_email_request(data):
     favorite_category = data.get("favorite_category")
     if not favorite_category or not str(favorite_category).strip():
         errors.append({"field": "favorite_category", "message": "Favorite Category is required."})
+    elif favorite_category not in ALLOWED_CATEGORIES:
+        available = ", ".join(ALLOWED_CATEGORIES)
+        errors.append({"field": "favorite_category", "message": f"Unknown category. Choose from: {available}."})
 
     total_spending = data.get("total_spending")
     if total_spending is None:
         errors.append({"field": "total_spending", "message": "Total Spending is required."})
-    elif not isinstance(total_spending, (int, float)):
+    elif isinstance(total_spending, bool) or not isinstance(total_spending, (int, float)):
         errors.append({"field": "total_spending", "message": "Total Spending must be a number."})
     elif total_spending <= 0:
         errors.append({"field": "total_spending", "message": "Total Spending must be greater than 0."})
@@ -50,7 +78,8 @@ def validate_email_request(data):
     if not tone:
         errors.append({"field": "tone", "message": "Tone is required."})
     elif tone not in ALLOWED_TONES:
-        errors.append({"field": "tone", "message": "Tone must be one of: Friendly, Professional, Luxury, Exciting."})
+        available = ", ".join(ALLOWED_TONES)
+        errors.append({"field": "tone", "message": f"Unknown tone. Choose from: {available}."})
 
     if errors:
         return {"valid": False, "errors": errors}

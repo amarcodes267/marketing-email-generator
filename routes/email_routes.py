@@ -1,6 +1,7 @@
-from flask import Blueprint, request, jsonify
-from utils.validator import validate_email_request
+from flask import Blueprint, jsonify, request
+
 from services.email_service import generate_email
+from utils.validator import validate_email_request
 
 email_bp = Blueprint("email", __name__)
 
@@ -20,6 +21,12 @@ def generate_email_route():
         first_error = validation["errors"][0]
         return jsonify({"success": False, "message": first_error["message"]}), 400
 
-    result = generate_email(data)
+    try:
+        result = generate_email(data)
+    except ValueError as error:
+        return jsonify({"success": False, "message": str(error)}), 400
+    except Exception as error:
+        return jsonify({"success": False, "message": f"Unexpected server error: {error}"}), 500
 
-    return jsonify(result), 200
+    status_code = 200 if result.get("success") else 500
+    return jsonify(result), status_code

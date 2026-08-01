@@ -102,10 +102,22 @@
             <label for="emailTone">Email Tone <span class="required">*</span></label>
             <select id="emailTone" required>
               <option value="">Select Tone</option>
-              <option value="Professional">Professional</option>
               <option value="Friendly">Friendly</option>
+              <option value="Warm">Warm</option>
+              <option value="Casual">Casual</option>
+              <option value="Conversational">Conversational</option>
+              <option value="Professional">Professional</option>
+              <option value="Formal">Formal</option>
+              <option value="Business">Business</option>
+              <option value="Trustworthy">Trustworthy</option>
               <option value="Luxury">Luxury</option>
+              <option value="Elegant">Elegant</option>
+              <option value="Premium">Premium</option>
+              <option value="Exclusive">Exclusive</option>
               <option value="Exciting">Exciting</option>
+              <option value="Energetic">Energetic</option>
+              <option value="Urgent">Urgent</option>
+              <option value="Promotional">Promotional</option>
             </select>
             <span class="error-message" id="toneError"></span>
           </div>
@@ -133,19 +145,19 @@
         <div class="card output-card">
           <h2 class="card-title">Generated Marketing Email</h2>
 
-          <div class="spinner-overlay" id="spinnerOverlay">
+          <div class="spinner-overlay" id="spinnerOverlay" role="status" aria-live="polite">
             <div class="spinner"></div>
-            <p class="spinner-text">Generating AI Email...</p>
+            <p class="spinner-text">Generating personalized marketing email...</p>
           </div>
 
           <div class="output-group">
             <label for="subjectOutput">Subject</label>
-            <textarea id="subjectOutput" class="output-textarea" rows="2" readonly placeholder="Subject will appear here..."></textarea>
+            <textarea id="subjectOutput" class="output-textarea" rows="2" readonly placeholder="Waiting for generation..."></textarea>
           </div>
 
           <div class="output-group">
             <label for="emailOutput">Email</label>
-            <textarea id="emailOutput" class="output-textarea email-body" rows="12" readonly placeholder="Your AI generated email will appear here..."></textarea>
+            <textarea id="emailOutput" class="output-textarea email-body" rows="12" readonly placeholder="Your personalized email will appear here..."></textarea>
           </div>
         </div>
       </section>
@@ -153,12 +165,12 @@
     </div>
   </main>
 
-  <div class="toast" id="toast"></div>
+  <div class="notification-container" id="notificationContainer" aria-live="polite" aria-atomic="false"></div>
 
   <footer class="footer">
     <div class="footer-container">
       <p>Developed using HTML &bull; CSS &bull; JavaScript</p>
-      <p>Powered by AI <span class="coming-soon">(Coming Soon)</span></p>
+      <p>Powered by TinyLlama AI <span class="live-badge">Live</span></p>
     </div>
   </footer>
 
