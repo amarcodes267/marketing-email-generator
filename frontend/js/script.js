@@ -242,11 +242,24 @@
   }
 
   function readResponsePayload(response, fallbackMessage) {
-    return response.json().then(function(data) {
-      if (data && typeof data === 'object') {
-        return data;
-      }
-      return { success: false, message: fallbackMessage };
+    const contentType = response.headers.get('Content-Type') || '';
+    if (contentType.includes('application/json')) {
+      return response.json().then(function(data) {
+        if (data && typeof data === 'object') {
+          return data;
+        }
+        return { success: false, message: fallbackMessage };
+      }).catch(function() {
+        return { success: false, message: fallbackMessage };
+      });
+    }
+
+    return response.text().then(function(text) {
+      const trimmed = (text || '').trim();
+      const message = trimmed
+        ? `Server returned an invalid response (${response.status} ${response.statusText}): ${trimmed}`
+        : fallbackMessage;
+      return { success: false, message };
     }).catch(function() {
       return { success: false, message: fallbackMessage };
     });

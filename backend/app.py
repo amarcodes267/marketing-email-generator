@@ -20,6 +20,27 @@ def create_app():
     CORS(app, resources={r"/*": {"origins": "*"}})
     app.register_blueprint(email_bp)
 
+    @app.errorhandler(404)
+    def handle_not_found(error):
+        return jsonify({"success": False, "message": "Endpoint not found."}), 404
+
+    @app.errorhandler(405)
+    def handle_method_not_allowed(error):
+        return jsonify({"success": False, "message": "Method not allowed."}), 405
+
+    @app.errorhandler(413)
+    def handle_request_entity_too_large(error):
+        return jsonify({"success": False, "message": "Request body is too large."}), 413
+
+    @app.errorhandler(415)
+    def handle_unsupported_media_type(error):
+        return jsonify({"success": False, "message": "Content-Type must be application/json."}), 415
+
+    @app.errorhandler(Exception)
+    def handle_generic_exception(error):
+        app.logger.exception(error)
+        return jsonify({"success": False, "message": "Unexpected server error. Please try again."}), 500
+
     @app.route("/")
     def index():
         return render_template("index.html")
