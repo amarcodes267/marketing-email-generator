@@ -31,7 +31,7 @@ The frontend is served by Flask:
 | `services/personalization_service.py` | Customer segmentation, loyalty, discount, tone, CTA       |
 | `services/recommendation_service.py`  | Product recommendation by category/segment                 |
 | `services/ai_service.py`      | Prompt building, model invocation, output parsing/cleaning        |
-| `models/llm.py`               | TinyLlama model loading + thread-safe generation                  |
+| `models/llm.py`               | Hugging Face model loading + thread-safe generation               |
 | `prompts/email_prompt.py`     | Builds the system/user prompt for the LLM                         |
 | `utils/validator.py`          | Request validation                                               |
 | `data/`                       | Data directory (reserved)                                         |
@@ -51,7 +51,7 @@ services/email_service.generate_email()
   ▼
 services/ai_service.generate_ai_email()
   │  build_email_prompt()
-  │  models/llm.generate_text()  (TinyLlama inference)
+  │  models/llm.generate_text()  (Hugging Face inference)
   │  parse + clean AI output
   ▼
 JSON response  { success, subject, email }
@@ -63,7 +63,7 @@ JSON response  { success, subject, email }
 |----------|-----------------------------------------------|
 | Frontend | HTML5, CSS3, Vanilla JavaScript (ES6+)        |
 | Backend  | Python 3.12, Flask 3.1                        |
-| AI / ML  | Hugging Face Transformers, PyTorch, TinyLlama |
+| AI / ML  | Hugging Face Transformers, PyTorch            |
 | Infra    | Flask-CORS, Gunicorn, python-dotenv, pytest   |
 | Testing  | pytest (32 unit + integration tests)          |
 
