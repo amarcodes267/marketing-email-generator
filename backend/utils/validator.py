@@ -1,4 +1,7 @@
 ALLOWED_GENDERS = ["Male", "Female", "Other"]
+MAX_NAME_LENGTH = 80
+MAX_LOCATION_LENGTH = 120
+MAX_PURCHASE_HISTORY_LENGTH = 2000
 ALLOWED_TONES = [
     "Friendly",
     "Warm",
@@ -36,6 +39,8 @@ def validate_email_request(data):
     customer_name = data.get("customer_name")
     if not customer_name or not str(customer_name).strip():
         errors.append({"field": "customer_name", "message": "Customer Name is required."})
+    elif len(str(customer_name).strip()) > MAX_NAME_LENGTH:
+        errors.append({"field": "customer_name", "message": f"Customer Name must be at most {MAX_NAME_LENGTH} characters."})
 
     age = data.get("age")
     if age is None:
@@ -54,10 +59,14 @@ def validate_email_request(data):
     location = data.get("location")
     if not location or not str(location).strip():
         errors.append({"field": "location", "message": "Location is required."})
+    elif len(str(location).strip()) > MAX_LOCATION_LENGTH:
+        errors.append({"field": "location", "message": f"Location must be at most {MAX_LOCATION_LENGTH} characters."})
 
     purchase_history = data.get("purchase_history")
     if not purchase_history or not str(purchase_history).strip():
         errors.append({"field": "purchase_history", "message": "Purchase History is required."})
+    elif len(str(purchase_history).strip()) > MAX_PURCHASE_HISTORY_LENGTH:
+        errors.append({"field": "purchase_history", "message": f"Purchase History must be at most {MAX_PURCHASE_HISTORY_LENGTH} characters."})
 
     favorite_category = data.get("favorite_category")
     if not favorite_category or not str(favorite_category).strip():

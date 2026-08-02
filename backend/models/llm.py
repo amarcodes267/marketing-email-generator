@@ -4,9 +4,7 @@ import threading
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-MODEL_NAME = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
-MAX_NEW_TOKENS = 500
-GENERATION_TIMEOUT_SECONDS = 300
+from config import GENERATION_TIMEOUT_SECONDS, MAX_NEW_TOKENS, MODEL_NAME
 
 _tokenizer = None
 _model = None

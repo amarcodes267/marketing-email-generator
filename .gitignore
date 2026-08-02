@@ -45,3 +45,7 @@ htmlcov/
 .qodo/
 debug_*.py
 
+# Environment
+.env
+.env.local
+

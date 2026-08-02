@@ -13,6 +13,12 @@ def health_check():
 
 @email_bp.route("/generate-email", methods=["POST"])
 def generate_email_route():
+    if not request.is_json:
+        return jsonify({"success": False, "message": "Content-Type must be application/json."}), 415
+
+    if request.content_length and request.content_length > request.max_content_length:
+        return jsonify({"success": False, "message": "Request body is too large."}), 413
+
     data = request.get_json(silent=True)
 
     validation = validate_email_request(data)
@@ -25,8 +31,8 @@ def generate_email_route():
         result = generate_email(data)
     except ValueError as error:
         return jsonify({"success": False, "message": str(error)}), 400
-    except Exception as error:
-        return jsonify({"success": False, "message": f"Unexpected server error: {error}"}), 500
+    except Exception:
+        return jsonify({"success": False, "message": "Unexpected server error. Please try again."}), 500
 
     status_code = 200 if result.get("success") else 500
     return jsonify(result), status_code
