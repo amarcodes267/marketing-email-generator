@@ -88,6 +88,47 @@ Generates a personalized marketing email.
 
 **Errors:** `400` invalid fields · `413` body too large · `415` wrong Content-Type · `500` AI/server error.
 
+## Deployment on Render
+
+This project includes a `render.yaml` (Render Blueprint) that deploys **two services**: a Flask backend API and a static frontend site.
+
+### Files for deployment
+
+| File | Purpose |
+|------|---------|
+| `render.yaml` | Render Blueprint — defines the backend (Python) and frontend (Static) services |
+| `backend/runtime.txt` | Pins Python 3.12.10 for the backend |
+| `frontend/js/config.js` | Lets the frontend point to the deployed backend URL |
+
+### Steps on Render
+
+1. **Push this repository to GitHub** (already done for `amarcodes267/marketing-email-generator`).
+
+2. **Connect the repo on Render**:
+   - Go to [render.com](https://render.com) → **New +** → **Blueprint** → select your GitHub repo.
+   - Render reads `render.yaml` and creates both services automatically:
+     - `marketing-copy-backend` (Flask API, free web service)
+     - `marketing-copy-frontend` (static site, free static service)
+
+3. **Deploy the backend first** — wait until it says **Live**. The first deploy downloads the TinyLlama model (~2.3 GB) and may take several minutes.
+
+4. **Copy your backend URL** — e.g. `https://marketing-copy-backend.onrender.com`.
+
+5. **Point the frontend at the backend**:
+   - Edit `frontend/js/config.js` and set:
+     ```js
+     window.MARKETING_AI_API_URL = 'https://marketing-copy-backend.onrender.com';
+     ```
+   - Commit and push — Render auto-redeploys the frontend.
+
+6. **Done** — open your frontend URL (`https://marketing-copy-frontend.onrender.com`) and test.
+
+### Important notes
+
+- **Free tier memory:** Render free web services have **512 MB RAM**. TinyLlama (~2.3 GB) may exceed this. If generation fails with memory errors, either upgrade the backend instance (paid tier) or set `MODEL_NAME` to a smaller model.
+- **Cold starts:** Free services spin down after inactivity; the first request after idle may take time while the model reloads.
+- **Health check:** Render uses `GET /` on the backend, which returns the health check response.
+
 ## Testing
 
 ```bash

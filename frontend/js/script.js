@@ -7,6 +7,9 @@
   const EMAIL_EMPTY_STATE = 'Your personalized email will appear here...';
 
   const API_BASE_URL = (function resolveApiBaseUrl() {
+    if (window.MARKETING_AI_API_URL) {
+      return window.MARKETING_AI_API_URL;
+    }
     const protocol = window.location.protocol;
     const host = window.location.hostname;
     if (host && host !== 'localhost' && host !== '127.0.0.1') {
