@@ -75,7 +75,7 @@ See [.env.example](../.env.example) at the project root.
 | `FLASK_DEBUG`               | `false`                            | Enable/disable debug mode        |
 | `HOST`                      | `0.0.0.0`                          | Bind host                        |
 | `PORT`                      | `5000`                             | Bind port (Render injects `PORT`)|
-| `MODEL_NAME`                | `TheBloke/pythia-70m-chat`           | Hugging Face model           |
+| `MODEL_NAME`                | `TinyLlama/TinyLlama-1.1B-Chat-v1.0` | Hugging Face model           |
 | `MAX_NEW_TOKENS`            | `500`                              | Max tokens generated             |
 | `GENERATION_TIMEOUT_SECONDS`| `300`                              | Inference timeout                |
 | `MAX_REQUEST_BODY_BYTES`    | `65536`                            | Max request body size            |

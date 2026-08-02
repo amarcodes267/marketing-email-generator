@@ -21,7 +21,7 @@ services:
       - key: HOST
         value: 0.0.0.0
       - key: MODEL_NAME
-        value: TheBloke/pythia-70m-chat
+        value: TinyLlama/TinyLlama-1.1B-Chat-v1.0
       - key: MAX_NEW_TOKENS
         value: "500"
       - key: GENERATION_TIMEOUT_SECONDS
