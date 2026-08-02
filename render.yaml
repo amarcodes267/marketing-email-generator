@@ -30,5 +30,8 @@ services:
         value: "65536"
       - key: LOAD_IN_8BIT
         value: "false"
+      # Optional: set HF_TOKEN in Render secrets if your model requires authenticated Hugging Face access.
+      # - key: HF_TOKEN
+      #   value: "<your_huggingface_token>"
       # NOTE: Render injects the PORT variable automatically. Do not set it here.
 
