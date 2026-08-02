@@ -1,22 +1,20 @@
 # =============================================================================
 # Render Blueprint Configuration
-# Deploys the Flask backend (API) and the static frontend as two services.
+# Single service: Flask serves BOTH the frontend UI and the backend API,
+# so the whole app is available at ONE URL.
 # Docs: https://render.com/docs/blueprint-spec
 # =============================================================================
 
 services:
-  # ---------------------------------------------------------------------------
-  # Backend API service (Flask + Gunicorn)
-  # ---------------------------------------------------------------------------
   - type: web
-    name: marketing-copy-backend
+    name: marketing-email-generator
     runtime: python
     rootDir: backend
     region: oregon
     plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --timeout 600 --workers 1
-    healthCheckPath: /
+    healthCheckPath: /health
     envVars:
       - key: FLASK_ENV
         value: production
@@ -31,19 +29,4 @@ services:
       - key: MAX_REQUEST_BODY_BYTES
         value: "65536"
       # NOTE: Render injects the PORT variable automatically. Do not set it here.
-
-  # ---------------------------------------------------------------------------
-  # Frontend static site service
-  # ---------------------------------------------------------------------------
-  - type: web
-    name: marketing-copy-frontend
-    runtime: static
-    rootDir: frontend
-    region: oregon
-    plan: free
-    staticPublishPath: .
-    # IMPORTANT: After the backend service is live, open frontend/js/config.js
-    # and set window.MARKETING_AI_API_URL to your backend URL, e.g.
-    #   window.MARKETING_AI_API_URL = 'https://marketing-copy-backend.onrender.com';
-    # Then redeploy the frontend service.
 

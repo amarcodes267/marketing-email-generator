@@ -14,5 +14,5 @@
 //   Then redeploy the frontend service on Render.
 // =============================================================================
 
-window.MARKETING_AI_API_URL = 'https://marketing-email-generator-o0b9.onrender.com';
+window.MARKETING_AI_API_URL = '';
 

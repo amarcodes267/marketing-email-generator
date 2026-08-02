@@ -6,7 +6,7 @@ from utils.validator import validate_email_request
 email_bp = Blueprint("email", __name__)
 
 
-@email_bp.route("/", methods=["GET"])
+@email_bp.route("/health", methods=["GET"])
 def health_check():
     return jsonify({"message": "Marketing Copy AI Backend Running"}), 200
 

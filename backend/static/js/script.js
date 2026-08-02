@@ -10,12 +10,9 @@
     if (window.MARKETING_AI_API_URL) {
       return window.MARKETING_AI_API_URL;
     }
-    const protocol = window.location.protocol;
-    const host = window.location.hostname;
-    if (host && host !== 'localhost' && host !== '127.0.0.1') {
-      return `${protocol}//${host}:5000`;
-    }
-    return 'http://localhost:5000';
+    // Flask serves both the UI and the API from the same origin (single URL),
+    // so API calls use relative paths on the current origin.
+    return '';
   })();
 
   const formFields = [

@@ -55,13 +55,21 @@ pip install -r requirements.txt
 
 ## How to Run
 
-**Backend:** `cd backend && python app.py` - server runs on `http://0.0.0.0:5000`. Health check: `GET http://localhost:5000/`.
+**Single-URL app:** `cd backend && python app.py` - server runs on `http://0.0.0.0:5000`.
 
-**Frontend:** Navigate to `frontend/` and open `index.html` directly (calls the local Flask API at `http://localhost:5000`), or serve with `python -m http.server 8000` and visit `http://localhost:8000`.
+- `GET http://localhost:5000/` — serves the **frontend UI** (index.html)
+- `GET http://localhost:5000/health` — health check, returns `{"message": "Marketing Copy AI Backend Running"}`
+- `POST http://localhost:5000/generate-email` — the API
+
+The frontend is served directly by Flask (from `backend/templates/` and `backend/static/`), so the whole app lives at **one URL**.
 
 ## API Endpoints
 
 ### `GET /`
+
+Serves the frontend UI (single-URL app).
+
+### `GET /health`
 
 Health check. Returns `200` with `{"message": "Marketing Copy AI Backend Running"}`.
 
@@ -88,17 +96,18 @@ Generates a personalized marketing email.
 
 **Errors:** `400` invalid fields · `413` body too large · `415` wrong Content-Type · `500` AI/server error.
 
-## Deployment on Render
+## Deployment on Render (single URL)
 
-This project includes a `render.yaml` (Render Blueprint) that deploys **two services**: a Flask backend API and a static frontend site.
+This project includes a `render.yaml` (Render Blueprint) that deploys **one service**: Flask serves BOTH the frontend UI and the backend API from the same origin, so the whole app is available at **one URL**.
 
 ### Files for deployment
 
 | File | Purpose |
 |------|---------|
-| `render.yaml` | Render Blueprint — defines the backend (Python) and frontend (Static) services |
+| `render.yaml` | Render Blueprint — defines the single Python web service |
 | `backend/runtime.txt` | Pins Python 3.12.10 for the backend |
-| `frontend/js/config.js` | Lets the frontend point to the deployed backend URL |
+| `backend/templates/index.html` | Frontend UI served by Flask |
+| `backend/static/` | CSS + JS served by Flask |
 
 ### Steps on Render
 
@@ -106,28 +115,18 @@ This project includes a `render.yaml` (Render Blueprint) that deploys **two serv
 
 2. **Connect the repo on Render**:
    - Go to [render.com](https://render.com) → **New +** → **Blueprint** → select your GitHub repo.
-   - Render reads `render.yaml` and creates both services automatically:
-     - `marketing-copy-backend` (Flask API, free web service)
-     - `marketing-copy-frontend` (static site, free static service)
+   - Render reads `render.yaml` and creates the single service automatically:
+     - `marketing-email-generator` (Flask app, free web service)
 
-3. **Deploy the backend first** — wait until it says **Live**. The first deploy downloads the TinyLlama model (~2.3 GB) and may take several minutes.
+3. **Deploy** — wait until it says **Live**. The first deploy downloads the TinyLlama model (~2.3 GB) and may take several minutes.
 
-4. **Copy your backend URL** — e.g. `https://marketing-copy-backend.onrender.com`.
-
-5. **Point the frontend at the backend**:
-   - Edit `frontend/js/config.js` and set:
-     ```js
-     window.MARKETING_AI_API_URL = 'https://marketing-copy-backend.onrender.com';
-     ```
-   - Commit and push — Render auto-redeploys the frontend.
-
-6. **Done** — open your frontend URL (`https://marketing-copy-frontend.onrender.com`) and test.
+4. **Done** — open your single URL (e.g. `https://marketing-email-generator-o0b9.onrender.com`) and test.
 
 ### Important notes
 
 - **Free tier memory:** Render free web services have **512 MB RAM**. TinyLlama (~2.3 GB) may exceed this. If generation fails with memory errors, either upgrade the backend instance (paid tier) or set `MODEL_NAME` to a smaller model.
 - **Cold starts:** Free services spin down after inactivity; the first request after idle may take time while the model reloads.
-- **Health check:** Render uses `GET /` on the backend, which returns the health check response.
+- **Health check:** Render uses `GET /health` on the backend.
 
 ## Testing
 
