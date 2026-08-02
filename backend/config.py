@@ -4,8 +4,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-MODEL_NAME = os.getenv("MODEL_NAME", "EleutherAI/pythia-70m")
-MAX_NEW_TOKENS = int(os.getenv("MAX_NEW_TOKENS", "500"))
+MODEL_NAME = os.getenv("MODEL_NAME", "distilgpt2")
+MAX_NEW_TOKENS = int(os.getenv("MAX_NEW_TOKENS", "250"))
 GENERATION_TIMEOUT_SECONDS = int(os.getenv("GENERATION_TIMEOUT_SECONDS", "300"))
 MAX_REQUEST_BODY_BYTES = int(os.getenv("MAX_REQUEST_BODY_BYTES", str(64 * 1024)))
 

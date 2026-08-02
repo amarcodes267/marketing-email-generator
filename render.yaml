@@ -21,9 +21,9 @@ services:
       - key: HOST
         value: 0.0.0.0
       - key: MODEL_NAME
-        value: EleutherAI/pythia-70m
+        value: distilgpt2
       - key: MAX_NEW_TOKENS
-        value: "500"
+        value: "250"
       - key: GENERATION_TIMEOUT_SECONDS
         value: "300"
       - key: MAX_REQUEST_BODY_BYTES

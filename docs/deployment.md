@@ -61,7 +61,7 @@ the whole app is available at one URL.
 
 ### Important notes
 
-- **Free tier memory:** Render free web services have **512 MB RAM**. Large models may exceed this. If generation fails with memory errors, upgrade the instance or set `MODEL_NAME` to a smaller model.
+- **Free tier memory:** Render free web services have **512 MB RAM** and are best used with a very small model such as `distilgpt2`. Larger models like `EleutherAI/pythia-70m` may exceed this limit and fail to load.
 - **Cold starts:** Free services spin down after inactivity; the first request after idle may take time while the model reloads.
 - **Health check:** Render uses `GET /health` on the backend.
 
@@ -75,8 +75,8 @@ See [.env.example](../.env.example) at the project root.
 | `FLASK_DEBUG`               | `false`                            | Enable/disable debug mode        |
 | `HOST`                      | `0.0.0.0`                          | Bind host                        |
 | `PORT`                      | `5000`                             | Bind port (Render injects `PORT`)|
-| `MODEL_NAME`                | `EleutherAI/pythia-70m`             | Hugging Face model           |
-| `MAX_NEW_TOKENS`            | `500`                              | Max tokens generated             |
+| `MODEL_NAME`                | `distilgpt2`                        | Hugging Face model           |
+| `MAX_NEW_TOKENS`            | `250`                              | Max tokens generated             |
 | `GENERATION_TIMEOUT_SECONDS`| `300`                              | Inference timeout                |
 | `MAX_REQUEST_BODY_BYTES`    | `65536`                            | Max request body size            |
 
