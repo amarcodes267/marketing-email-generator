@@ -21,17 +21,14 @@ services:
       - key: HOST
         value: 0.0.0.0
       - key: MODEL_NAME
-        value: OuteAI/Lite-Oute-1-300M-Instruct
+        value: gemini-1.5
       - key: MAX_NEW_TOKENS
         value: "250"
       - key: GENERATION_TIMEOUT_SECONDS
         value: "300"
       - key: MAX_REQUEST_BODY_BYTES
         value: "65536"
-      - key: LOAD_IN_8BIT
-        value: "false"
-      # Optional: set HF_TOKEN in Render secrets if your model requires authenticated Hugging Face access.
-      # - key: HF_TOKEN
-      #   value: "<your_huggingface_token>"
+      - key: GOOGLE_API_KEY
+        value: "<your_google_api_key>"
       # NOTE: Render injects the PORT variable automatically. Do not set it here.
 

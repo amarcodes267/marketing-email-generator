@@ -1,8 +1,14 @@
+import os
 import re
 
-from models.llm import ModelLoadError, generate_text, load_model
 from prompts.email_prompt import build_email_prompt
 from services.recommendation_service import recommend_product
+from config import GOOGLE_API_KEY, GENAI_MODEL_NAME, MAX_NEW_TOKENS
+
+try:
+    from google.generativeai import client as genai_client
+except ImportError:
+    genai_client = None
 
 SUBJECT_PATTERNS = [
     re.compile(r"\[\s*Subject(?:\s+Line)?\s*:\s*(.+?)\s*\]", re.IGNORECASE | re.DOTALL),
@@ -287,6 +293,28 @@ def _parse_generated_text(generated_text, data):
     return None, None
 
 
+def _generate_with_gemini(prompt_messages):
+    if genai_client is None:
+        raise RuntimeError("google.generativeai is not installed. Add it to requirements.txt.")
+    if not GOOGLE_API_KEY:
+        raise RuntimeError("GOOGLE_API_KEY is not set.")
+
+    genai_client.configure(api_key=GOOGLE_API_KEY)
+    prompt_text = "\n\n".join([message["content"] for message in prompt_messages])
+
+    response = genai_client.generate(
+        model=os.getenv("GENAI_MODEL_NAME", "gemini-1.5"),
+        prompt=prompt_text,
+        max_output_tokens=MAX_NEW_TOKENS,
+        temperature=0.7,
+    )
+
+    if not response or not hasattr(response, "text"):
+        raise RuntimeError("Gemini response was empty or invalid.")
+
+    return response.text
+
+
 def generate_ai_email(data):
     try:
         prompt_messages = build_email_prompt(data)
@@ -294,14 +322,7 @@ def generate_ai_email(data):
         return {"success": False, "message": f"Prompt generation failed: {error}"}
 
     try:
-        load_model()
-    except ModelLoadError as error:
-        return {"success": False, "message": str(error)}
-    except Exception as error:
-        return {"success": False, "message": f"AI model initialization failed: {error}"}
-
-    try:
-        generated_text = generate_text(prompt_messages)
+        generated_text = _generate_with_gemini(prompt_messages)
     except TimeoutError as error:
         return {"success": False, "message": str(error)}
     except Exception as error:

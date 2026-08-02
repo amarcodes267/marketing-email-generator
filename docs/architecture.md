@@ -30,8 +30,8 @@ The frontend is served by Flask:
 | `services/email_service.py`   | Orchestrates enrichment + AI generation                           |
 | `services/personalization_service.py` | Customer segmentation, loyalty, discount, tone, CTA       |
 | `services/recommendation_service.py`  | Product recommendation by category/segment                 |
-| `services/ai_service.py`      | Prompt building, model invocation, output parsing/cleaning        |
-| `models/llm.py`               | Hugging Face model loading + thread-safe generation               |
+| `services/ai_service.py`      | Prompt building, Gemini API invocation, output parsing/cleaning   |
+| `models/llm.py`               | Legacy local model stub (Gemini API is used for generation)       |
 | `prompts/email_prompt.py`     | Builds the system/user prompt for the LLM                         |
 | `utils/validator.py`          | Request validation                                               |
 | `data/`                       | Data directory (reserved)                                         |
@@ -51,7 +51,7 @@ services/email_service.generate_email()
   ▼
 services/ai_service.generate_ai_email()
   │  build_email_prompt()
-  │  models/llm.generate_text()  (Hugging Face inference)
+  │  services/ai_service._generate_with_gemini()  (Gemini API inference)
   │  parse + clean AI output
   ▼
 JSON response  { success, subject, email }
@@ -63,7 +63,7 @@ JSON response  { success, subject, email }
 |----------|-----------------------------------------------|
 | Frontend | HTML5, CSS3, Vanilla JavaScript (ES6+)        |
 | Backend  | Python 3.12, Flask 3.1                        |
-| AI / ML  | Hugging Face Transformers, PyTorch            |
+| AI / ML  | Gemini API via google-generativeai         |
 | Infra    | Flask-CORS, Gunicorn, python-dotenv, pytest   |
 | Testing  | pytest (32 unit + integration tests)          |
 

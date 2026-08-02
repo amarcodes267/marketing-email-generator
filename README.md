@@ -1,7 +1,7 @@
 # Personalized Marketing Copy AI
 
 ## Overview
-Personalized Marketing Copy AI is a full-stack web application that converts customer profile data into polished marketing emails. It collects information such as the customer�s name, age, gender, location, purchase history, favorite category, and total spending. The app then analyzes that data to determine the customer segment, loyalty level, spending range, and the best discount suggestion. Using a local open-source language model, it generates a tailored subject line and email body without requiring any API keys or paid services.
+Personalized Marketing Copy AI is a full-stack web application that converts customer profile data into polished marketing emails. It collects information such as the customer�s name, age, gender, location, purchase history, favorite category, and total spending. The app then analyzes that data to determine the customer segment, loyalty level, spending range, and the best discount suggestion. It sends a prompt to the Gemini API using `GOOGLE_API_KEY` and generates a tailored subject line and email body from the cloud model.
 
 ## Why This Project Exists
 This project demonstrates how AI can be used in practical marketing workflows. It combines data analysis, prompt building, and content generation into a simple experience that can be run locally. It is useful for small businesses, marketing teams, and developers who want to explore AI-generated copy without depending on external SaaS platforms.
@@ -18,7 +18,7 @@ This project demonstrates how AI can be used in practical marketing workflows. I
 ## Tech Stack
 - Frontend: HTML, CSS, and JavaScript
 - Backend: Python and Flask
-- AI Layer: Hugging Face Transformers and PyTorch
+- AI Layer: Gemini API via `google-generativeai`
 - Deployment: Render-ready with a simple single-service setup
 
 ## Project Structure

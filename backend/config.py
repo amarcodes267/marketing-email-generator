@@ -4,12 +4,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-MODEL_NAME = os.getenv("MODEL_NAME", "OuteAI/Lite-Oute-1-300M-Instruct")
+MODEL_NAME = os.getenv("MODEL_NAME", "gemini-1.5")
+GENAI_MODEL_NAME = os.getenv("GENAI_MODEL_NAME", MODEL_NAME)
 MAX_NEW_TOKENS = int(os.getenv("MAX_NEW_TOKENS", "250"))
 GENERATION_TIMEOUT_SECONDS = int(os.getenv("GENERATION_TIMEOUT_SECONDS", "300"))
 MAX_REQUEST_BODY_BYTES = int(os.getenv("MAX_REQUEST_BODY_BYTES", str(64 * 1024)))
-LOAD_IN_8BIT = os.getenv("LOAD_IN_8BIT", "false").lower() == "true"
-HF_TOKEN = os.getenv("HF_TOKEN")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 
 class Config:

@@ -61,8 +61,8 @@ the whole app is available at one URL.
 
 ### Important notes
 
-- **Free tier memory:** Render free web services have **512 MB RAM** and are best used with a very small model such as `OuteAI/Lite-Oute-1-300M-Instruct`. Larger models may exceed this limit and fail to load.
-- **Cold starts:** Free services spin down after inactivity; the first request after idle may take time while the model reloads.
+- **Remote AI generation:** This app uses the Gemini API, so the backend remains lightweight and does not load a local model in Render.
+- **Cold starts:** Render free services may still take longer after idle, but the AI inference is handled by Gemini.
 - **Health check:** Render uses `GET /health` on the backend.
 
 ## Environment Variables
@@ -75,10 +75,10 @@ See [.env.example](../.env.example) at the project root.
 | `FLASK_DEBUG`               | `false`                            | Enable/disable debug mode        |
 | `HOST`                      | `0.0.0.0`                          | Bind host                        |
 | `PORT`                      | `5000`                             | Bind port (Render injects `PORT`)|
-| `MODEL_NAME`                | `OuteAI/Lite-Oute-1-300M-Instruct` | Hugging Face model           |
-| `MAX_NEW_TOKENS`            | `250`                              | Max tokens generated             |
-| `GENERATION_TIMEOUT_SECONDS`| `300`                              | Inference timeout                |
-| `MAX_REQUEST_BODY_BYTES`    | `65536`                            | Max request body size            |
-| `LOAD_IN_8BIT`              | `false`                            | Load the model in 8-bit mode if supported |
-| `HF_TOKEN`                  | _(optional)_                      | Hugging Face access token for authenticated model downloads |
+| `MODEL_NAME`                | `gemini-1.5`                       | Gemini model name for AI generation |
+| `GENAI_MODEL_NAME`          | `gemini-1.5`                       | Gemini model name override   |
+| `MAX_NEW_TOKENS`            | `250`                              | Max tokens generated         |
+| `GENERATION_TIMEOUT_SECONDS`| `300`                              | Inference timeout            |
+| `MAX_REQUEST_BODY_BYTES`    | `65536`                            | Max request body size        |
+| `GOOGLE_API_KEY`            | _(required)_                       | Google API key for Gemini access |
 
