@@ -80,4 +80,5 @@ See [.env.example](../.env.example) at the project root.
 | `GENERATION_TIMEOUT_SECONDS`| `300`                              | Inference timeout                |
 | `MAX_REQUEST_BODY_BYTES`    | `65536`                            | Max request body size            |
 | `LOAD_IN_8BIT`              | `false`                            | Load the model in 8-bit mode if supported |
+| `HF_TOKEN`                  | _(optional)_                      | Hugging Face access token for authenticated model downloads |
 

@@ -1,10 +1,13 @@
+import logging
 import queue
 import threading
 
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from config import GENERATION_TIMEOUT_SECONDS, LOAD_IN_8BIT, MAX_NEW_TOKENS, MODEL_NAME
+from config import GENERATION_TIMEOUT_SECONDS, HF_TOKEN, LOAD_IN_8BIT, MAX_NEW_TOKENS, MODEL_NAME
+
+logger = logging.getLogger(__name__)
 
 _tokenizer = None
 _model = None
@@ -25,7 +28,14 @@ def load_model():
         if _model_ready:
             return
         try:
-            _tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+            if not HF_TOKEN:
+                logger.warning(
+                    "HF_TOKEN is not set. Loading from Hugging Face Hub unauthenticated; "
+                    "model downloads may be slower or throttled."
+                )
+
+            auth_args = {"use_auth_token": HF_TOKEN} if HF_TOKEN else {}
+            _tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, **auth_args)
             model_kwargs = {
                 "low_cpu_mem_usage": True,
                 "dtype": torch.float32,
@@ -38,6 +48,7 @@ def load_model():
             _model = AutoModelForCausalLM.from_pretrained(
                 MODEL_NAME,
                 **model_kwargs,
+                **auth_args,
             )
             _model.eval()
             _model_ready = True
