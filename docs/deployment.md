@@ -6,7 +6,7 @@
 
 - Python 3.12+
 - pip
-- Internet access (first run downloads the TinyLlama model, ~2.3 GB, then cached)
+- Internet access (first run downloads the smaller model, then caches it)
 
 ### Setup
 
@@ -56,12 +56,12 @@ the whole app is available at one URL.
 2. Go to [render.com](https://render.com) → **New +** → **Blueprint** → select the repo.
 3. Render reads `render.yaml` and creates the service:
    - `marketing-email-generator` (Flask app, free web service, `rootDir: backend`)
-4. Deploy. The first deploy downloads the TinyLlama model (~2.3 GB) and may take several minutes.
+4. Deploy. The first deploy downloads the selected model and may take several minutes.
 5. Open the deployed URL and test.
 
 ### Important notes
 
-- **Free tier memory:** Render free web services have **512 MB RAM**. TinyLlama (~2.3 GB) may exceed this. If generation fails with memory errors, upgrade the instance or set `MODEL_NAME` to a smaller model.
+- **Free tier memory:** Render free web services have **512 MB RAM**. Large models may exceed this. If generation fails with memory errors, upgrade the instance or set `MODEL_NAME` to a smaller model.
 - **Cold starts:** Free services spin down after inactivity; the first request after idle may take time while the model reloads.
 - **Health check:** Render uses `GET /health` on the backend.
 
@@ -75,7 +75,7 @@ See [.env.example](../.env.example) at the project root.
 | `FLASK_DEBUG`               | `false`                            | Enable/disable debug mode        |
 | `HOST`                      | `0.0.0.0`                          | Bind host                        |
 | `PORT`                      | `5000`                             | Bind port (Render injects `PORT`)|
-| `MODEL_NAME`                | `TinyLlama/TinyLlama-1.1B-Chat-v1.0` | Hugging Face model           |
+| `MODEL_NAME`                | `TheBloke/pythia-70m-chat`           | Hugging Face model           |
 | `MAX_NEW_TOKENS`            | `500`                              | Max tokens generated             |
 | `GENERATION_TIMEOUT_SECONDS`| `300`                              | Inference timeout                |
 | `MAX_REQUEST_BODY_BYTES`    | `65536`                            | Max request body size            |
