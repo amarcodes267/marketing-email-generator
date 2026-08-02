@@ -151,6 +151,8 @@ def _get_placeholder_defaults(data):
 
 
 def _replace_placeholders(text, data):
+    if text is None:
+        return ""
     defaults = _get_placeholder_defaults(data)
     text = PLACEHOLDER_PATTERN.sub(
         lambda match: defaults.get(match.group(0)[1:-1].strip().lower(), ""),
@@ -306,7 +308,7 @@ def generate_ai_email(data):
         return {"success": False, "message": f"AI generation failed: {error}"}
 
     parsed = _parse_generated_text(generated_text, data)
-    if parsed is None:
+    if not parsed or parsed[0] is None or parsed[1] is None:
         return {
             "success": False,
             "message": "AI output could not be parsed into a valid subject and email. Please try again.",

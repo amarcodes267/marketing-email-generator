@@ -4,7 +4,7 @@ import threading
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from config import GENERATION_TIMEOUT_SECONDS, MAX_NEW_TOKENS, MODEL_NAME
+from config import GENERATION_TIMEOUT_SECONDS, LOAD_IN_8BIT, MAX_NEW_TOKENS, MODEL_NAME
 
 _tokenizer = None
 _model = None
@@ -26,10 +26,18 @@ def load_model():
             return
         try:
             _tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+            model_kwargs = {
+                "low_cpu_mem_usage": True,
+                "dtype": torch.float32,
+            }
+            if LOAD_IN_8BIT:
+                model_kwargs = {
+                    "load_in_8bit": True,
+                    "device_map": "auto",
+                }
             _model = AutoModelForCausalLM.from_pretrained(
                 MODEL_NAME,
-                low_cpu_mem_usage=True,
-                dtype=torch.float32,
+                **model_kwargs,
             )
             _model.eval()
             _model_ready = True
@@ -38,9 +46,20 @@ def load_model():
 
 
 def _build_prompt_text(prompt_messages):
-    return _tokenizer.apply_chat_template(
-        prompt_messages, tokenize=False, add_generation_prompt=True
-    )
+    if hasattr(_tokenizer, "chat_template") and _tokenizer.chat_template is not None:
+        return _tokenizer.apply_chat_template(
+            prompt_messages, tokenize=False, add_generation_prompt=True
+        )
+
+    parts = []
+    for message in prompt_messages:
+        role = message.get("role", "")
+        content = message.get("content", "")
+        if role:
+            parts.append(f"[{role.upper()}] {content}")
+        else:
+            parts.append(content)
+    return "\n\n".join(parts)
 
 
 def _run_inference(prompt_messages, result_queue):

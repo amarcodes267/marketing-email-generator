@@ -48,4 +48,5 @@ debug_*.py
 # Environment
 .env
 .env.local
+.git_diff_email_service.txt
 

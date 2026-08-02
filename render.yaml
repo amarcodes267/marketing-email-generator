@@ -28,5 +28,7 @@ services:
         value: "300"
       - key: MAX_REQUEST_BODY_BYTES
         value: "65536"
+      - key: LOAD_IN_8BIT
+        value: "false"
       # NOTE: Render injects the PORT variable automatically. Do not set it here.
 
