@@ -69,6 +69,21 @@ the whole app is available at one URL.
 
 See [.env.example](../.env.example) at the project root.
 
+### Render deployment setup
+
+When deploying to Render, do not commit your API key. Set the following environment variables in the Render dashboard for your web service:
+
+- `FLASK_ENV=production`
+- `HOST=0.0.0.0`
+- `MODEL_NAME=gemini-1.5`
+- `GENAI_MODEL_NAME=gemini-1.5`
+- `MAX_NEW_TOKENS=250`
+- `GENERATION_TIMEOUT_SECONDS=300`
+- `MAX_REQUEST_BODY_BYTES=65536`
+- `GOOGLE_API_KEY=<your_google_api_key>`
+
+Use the `render.yaml` file in the repo as the service blueprint.
+
 | Variable                    | Default                            | Description                      |
 |-----------------------------|------------------------------------|----------------------------------|
 | `FLASK_ENV`                 | `development`                      | `development` or `production`    |

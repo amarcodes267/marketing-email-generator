@@ -10,12 +10,16 @@
 
   <nav class="navbar">
     <div class="nav-container">
-      <div class="nav-logo">
-        <span class="logo-icon">&#x2728;</span>
-        <span class="logo-text">Marketing AI</span>
+      <div class="nav-brand">
+        <span class="logo-icon">★</span>
+        <div class="logo-text">
+          <span class="brand-name">Marketing AI</span>
+          <span class="brand-tag">Premium email generation</span>
+        </div>
       </div>
       <ul class="nav-links">
         <li><a href="#" class="nav-link active">Home</a></li>
+        <li><a href="#" class="nav-link">Features</a></li>
         <li><a href="#" class="nav-link">About</a></li>
       </ul>
     </div>
@@ -23,9 +27,23 @@
 
   <header class="hero">
     <div class="hero-container">
-      <div class="hero-icon">&#x1F916;</div>
-      <h1 class="hero-title">Personalized Marketing Copy AI</h1>
-      <p class="hero-subtitle">Generate AI-powered personalized marketing emails using customer demographics and purchase history.</p>
+      <div class="hero-kicker">AI Generated Marketing</div>
+      <h1 class="hero-title">Create personalized email copy with premium AI support.</h1>
+      <p class="hero-subtitle">Use customer data and purchase behavior to generate high-impact marketing emails instantly.</p>
+      <div class="hero-stats">
+        <div class="stat-card">
+          <span class="stat-value">100+</span>
+          <span class="stat-label">Email tones</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value">Instant</span>
+          <span class="stat-label">Real-time generation</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value">Render</span>
+          <span class="stat-label">Ready deployment</span>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -34,11 +52,16 @@
 
       <section class="form-section">
         <div class="card form-card">
-          <h2 class="card-title">Customer Information</h2>
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Customer Profile</p>
+              <h2 class="card-title">Build your marketing email</h2>
+            </div>
+          </div>
 
           <div class="form-group">
             <label for="customerName">Customer Name <span class="required">*</span></label>
-            <input type="text" id="customerName" placeholder="Enter customer name" required>
+            <input type="text" id="customerName" placeholder="E.g. Priya Sharma" required>
             <span class="error-message" id="nameError"></span>
           </div>
 
@@ -48,7 +71,6 @@
               <input type="number" id="age" placeholder="25" min="18" max="100" required>
               <span class="error-message" id="ageError"></span>
             </div>
-
             <div class="form-group">
               <label for="gender">Gender <span class="required">*</span></label>
               <select id="gender" required>
@@ -63,13 +85,13 @@
 
           <div class="form-group">
             <label for="location">Location <span class="required">*</span></label>
-            <input type="text" id="location" placeholder="Delhi, Mumbai, Bangalore" required>
+            <input type="text" id="location" placeholder="E.g. Bangalore, India" required>
             <span class="error-message" id="locationError"></span>
           </div>
 
           <div class="form-group">
             <label for="purchaseHistory">Purchase History <span class="required">*</span></label>
-            <textarea id="purchaseHistory" placeholder="Nike Shoes&#10;Apple Watch&#10;Bluetooth Speaker" rows="4" required></textarea>
+            <textarea id="purchaseHistory" placeholder="Nike Shoes\nApple Watch\nBluetooth Speaker" rows="4" required></textarea>
             <span class="error-message" id="purchaseError"></span>
           </div>
 
@@ -87,11 +109,10 @@
               </select>
               <span class="error-message" id="categoryError"></span>
             </div>
-
             <div class="form-group">
               <label for="totalSpending">Total Spending <span class="required">*</span></label>
               <div class="input-icon-wrapper">
-                <span class="input-icon">&#x20B9;</span>
+                <span class="input-icon">₹</span>
                 <input type="number" id="totalSpending" placeholder="5000" min="1" required>
               </div>
               <span class="error-message" id="spendingError"></span>
@@ -123,19 +144,22 @@
           </div>
 
           <div class="sidebar-tips">
-            <p class="tip">&#x2714; Use complete customer information</p>
-            <p class="tip">&#x2714; More purchase history improves personalization</p>
-            <p class="tip">&#x2714; Choose the correct product category</p>
+            <p class="tip">Complete customer profiles generate better email copy.</p>
+            <p class="tip">Include recent purchases for improved personalization.</p>
+            <p class="tip">Choose a tone that matches the campaign goal.</p>
           </div>
 
           <div class="button-group">
             <button class="btn btn-primary" id="generateBtn">
-              <span class="btn-icon">&#x1F52E;</span>
-              Generate Personalized Email
+              <span class="btn-icon">⚡</span>
+              Generate Email
             </button>
             <div class="secondary-buttons">
-              <button class="btn btn-secondary" id="copyBtn" disabled>Copy Email</button>
               <button class="btn btn-outline" id="clearBtn">Clear Form</button>
+              <button class="btn btn-secondary" id="copyBtn" disabled>
+                <span class="btn-icon">📋</span>
+                Copy Email
+              </button>
             </div>
           </div>
         </div>
@@ -143,21 +167,27 @@
 
       <section class="output-section">
         <div class="card output-card">
-          <h2 class="card-title">Generated Marketing Email</h2>
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Output Preview</p>
+              <h2 class="card-title">Your generated email</h2>
+            </div>
+          </div>
 
           <div class="spinner-overlay" id="spinnerOverlay" role="status" aria-live="polite">
             <div class="spinner"></div>
             <p class="spinner-text">Generating personalized marketing email...</p>
           </div>
 
-          <div class="output-group">
-            <label for="subjectOutput">Subject</label>
-            <textarea id="subjectOutput" class="output-textarea" rows="2" readonly placeholder="Waiting for generation..."></textarea>
-          </div>
-
-          <div class="output-group">
-            <label for="emailOutput">Email</label>
-            <textarea id="emailOutput" class="output-textarea email-body" rows="12" readonly placeholder="Your personalized email will appear here..."></textarea>
+          <div class="output-panel">
+            <div class="subject-card">
+              <div class="output-label">Subject</div>
+              <textarea id="subjectOutput" class="output-textarea" rows="2" readonly placeholder="Waiting for generation..."></textarea>
+            </div>
+            <div class="body-card">
+              <div class="output-label">Email Copy</div>
+              <textarea id="emailOutput" class="output-textarea email-body" rows="12" readonly placeholder="Your personalized email will appear here..."></textarea>
+            </div>
           </div>
         </div>
       </section>
@@ -169,8 +199,8 @@
 
   <footer class="footer">
     <div class="footer-container">
-      <p>Developed using HTML &bull; CSS &bull; JavaScript</p>
-      <p>Powered by Hugging Face AI <span class="live-badge">Live</span></p>
+      <p>Built with HTML &bull; CSS &bull; JavaScript &bull; Flask</p>
+      <p>Powered by Gemini API</p>
     </div>
   </footer>
 
