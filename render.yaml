@@ -21,7 +21,7 @@ services:
       - key: HOST
         value: 0.0.0.0
       - key: MODEL_NAME
-        value: distilgpt2
+        value: OuteAI/Lite-Oute-1-300M-Instruct
       - key: MAX_NEW_TOKENS
         value: "250"
       - key: GENERATION_TIMEOUT_SECONDS
