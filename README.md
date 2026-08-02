@@ -88,21 +88,6 @@ Generates a personalized marketing email.
 
 **Errors:** `400` invalid fields · `413` body too large · `415` wrong Content-Type · `500` AI/server error.
 
-## Environment Variables
-
-Copy `.env.example` to `.env` and adjust as needed.
-
-| Variable                     | Default                              | Description                       |
-|------------------------------|--------------------------------------|-----------------------------------|
-| `FLASK_ENV`                  | `development`                        | `development` or `production`     |
-| `FLASK_DEBUG`                | `false`                              | Enable Flask debug mode           |
-| `HOST`                       | `0.0.0.0`                            | Server bind host                  |
-| `PORT`                       | `5000`                               | Server port                       |
-| `MODEL_NAME`                 | `TinyLlama/TinyLlama-1.1B-Chat-v1.0` | Hugging Face model identifier     |
-| `MAX_NEW_TOKENS`             | `500`                                | Maximum tokens generated          |
-| `GENERATION_TIMEOUT_SECONDS` | `300`                                | Inference timeout (seconds)       |
-| `MAX_REQUEST_BODY_BYTES`     | `65536`                              | Max accepted request body (bytes) |
-
 ## Testing
 
 ```bash
